@@ -2,16 +2,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "lexer.l"  // Include the lexer definitions from lexer.l
-#include "symbol_table.h"  // For symbol table handling
-#include "semantic_analysis.h"  // For semantic checks
-#include "intermediate_code.h"  // For intermediate code generation
+#include "lexer.l"  // Lexer definitions
+#include "semantic_analysis.h"  // Semantic analysis functions
+#include "intermediate_code.h"  // Intermediate code generation
 
-extern int yylex();  // Declare the lexer function
-extern int yylval;   // Declare the external variable yylval
+extern int yylex();  // Lexer function
+extern int yylval;   // Lexer value (used by Flex)
 
-// Function to print the Abstract Syntax Tree (optional)
-void print_ast(struct ASTNode* node);
+void print_ast(struct ASTNode* node);  // Optional: For printing the AST
+
 %}
 
 %union {
@@ -53,19 +52,37 @@ statement:
 
 declaration:
     type IDENTIFIER ';' {
-        /* Add the identifier to the symbol table */
-        insert_symbol($2, $1);
+        /* Insert variable into symbol table */
+        Symbol* existing_symbol = lookup_symbol($2);
+        if (existing_symbol != NULL) {
+            printf("Error: Variable '%s' already declared\n", $2);
+            exit(1);
+        }
+        insert_symbol($2, $1);  // Insert the variable with its type
+        printf("Declared variable: %s\n", $2);
     }
     ;
 
 type:
-    INT { $$ = 1; }
-    | FLOAT { $$ = 2; }
+    INT { $$ = INT_TYPE; }
+    | FLOAT { $$ = FLOAT_TYPE; }
     ;
 
 assignment:
     IDENTIFIER '=' expression ';' {
-        /* Perform assignment */
+        /* Look up the variable in the symbol table */
+        Symbol* symbol = lookup_symbol($1);
+        if (symbol == NULL) {
+            printf("Error: Undeclared variable '%s'\n", $1);
+            exit(1);
+        }
+
+        // Perform type checking (expression type must match variable type)
+        if (symbol->type != $3) {
+            printf("Error: Type mismatch for variable '%s'\n", $1);
+            exit(1);
+        }
+
         printf("Assigned value to %s\n", $1);
     }
     ;
@@ -104,13 +121,26 @@ expression_statement:
 
 expression:
     IDENTIFIER {
-        $$ = lookup_symbol($1);  // Look up identifier in the symbol table
+        /* Look up identifier and handle semantic errors */
+        Symbol* symbol = lookup_symbol($1);
+        if (symbol == NULL) {
+            printf("Error: Undeclared variable '%s'\n", $1);
+            exit(1);
+        }
+        $$ = symbol->type;  // Return the type of the variable
     }
     | NUMBER {
-        $$ = $1;
+        $$ = INT_TYPE;  // Set the type for number literals
     }
     | IDENTIFIER '+' IDENTIFIER {
-        $$ = $1 + $3;  // Example for addition of two identifiers (simple arithmetic)
+        /* Type checking for addition */
+        Symbol* symbol1 = lookup_symbol($1);
+        Symbol* symbol2 = lookup_symbol($3);
+        if (symbol1->type != symbol2->type) {
+            printf("Error: Type mismatch in addition\n");
+            exit(1);
+        }
+        $$ = symbol1->type;  // Result type is the same as the operands
     }
     | '(' expression ')' {
         $$ = $2;
@@ -130,6 +160,11 @@ int yyerror(char* s) {
 }
 
 int main() {
-    yyparse();
+    // Initialize the symbol table
+    symbol_table = NULL;
+
+    yyparse();  // Start parsing
+    free_symbol_table();  // Free symbol table after parsing
+
     return 0;
 }
