@@ -4,13 +4,13 @@
 #include <string.h>
 #include "lexer.l"  // Lexer definitions
 #include "semantic_analysis.h"  // Semantic analysis functions
-#include "intermediate_code.h"  // Intermediate code generation
+#include "ast.h"  // AST definitions
+#include "intermediate_code.h"  // Intermediate code generation functions
 
 extern int yylex();  // Lexer function
 extern int yylval;   // Lexer value (used by Flex)
 
 void print_ast(struct ASTNode* node);  // Optional: For printing the AST
-
 %}
 
 %union {
@@ -89,29 +89,49 @@ assignment:
 
 if_statement:
     IF expression block ELSE block {
-        /* Handle if-else statement */
+        /* Generate AST for if-else */
+        $$ = create_if_node($2, $4, $6);
+        // Generate intermediate code (TAC)
+        TAC* tac = generate_tac($$);
+        print_tac(tac);
+        free_tac(tac);
     }
     | IF expression block ELIF expression block {
-        /* Handle if-elif statements */
+        $$ = create_if_node($2, $4, $6);
+        // Generate intermediate code (TAC)
+        TAC* tac = generate_tac($$);
+        print_tac(tac);
+        free_tac(tac);
     }
     ;
 
 while_statement:
     WHILE expression block {
-        /* Handle while loop */
+        $$ = create_while_node($2, $4);
+        // Generate intermediate code (TAC)
+        TAC* tac = generate_tac($$);
+        print_tac(tac);
+        free_tac(tac);
     }
     ;
 
 return_statement:
     RETURN expression ';' {
-        /* Handle return statement */
+        $$ = create_binop_node(AST_ASSIGN, $2, NULL);
+        // Generate intermediate code (TAC)
+        TAC* tac = generate_tac($$);
+        print_tac(tac);
+        free_tac(tac);
     }
     ;
 
 print_statement:
     PRINT expression ';' {
-        /* Print the value of the expression */
-        printf("Print: %d\n", $2);
+        $$ = create_binop_node(AST_ASSIGN, $2, NULL);
+        // Generate intermediate code (TAC)
+        TAC* tac = generate_tac($$);
+        print_tac(tac);
+        free_tac(tac);
     }
     ;
 
@@ -127,10 +147,10 @@ expression:
             printf("Error: Undeclared variable '%s'\n", $1);
             exit(1);
         }
-        $$ = symbol->type;  // Return the type of the variable
+        $$ = create_identifier_node($1);  // Create AST node for identifier
     }
     | NUMBER {
-        $$ = INT_TYPE;  // Set the type for number literals
+        $$ = create_number_node($1);  // Create AST node for number
     }
     | IDENTIFIER '+' IDENTIFIER {
         /* Type checking for addition */
@@ -140,10 +160,19 @@ expression:
             printf("Error: Type mismatch in addition\n");
             exit(1);
         }
-        $$ = symbol1->type;  // Result type is the same as the operands
+        $$ = create_binop_node(AST_ADD, create_identifier_node($1), create_identifier_node($3));
+    }
+    | IDENTIFIER '-' IDENTIFIER {
+        $$ = create_binop_node(AST_SUB, create_identifier_node($1), create_identifier_node($3));
+    }
+    | IDENTIFIER '*' IDENTIFIER {
+        $$ = create_binop_node(AST_MUL, create_identifier_node($1), create_identifier_node($3));
+    }
+    | IDENTIFIER '/' IDENTIFIER {
+        $$ = create_binop_node(AST_DIV, create_identifier_node($1), create_identifier_node($3));
     }
     | '(' expression ')' {
-        $$ = $2;
+        $$ = $2;  // Parenthesized expression
     }
     ;
 
