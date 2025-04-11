@@ -5,22 +5,31 @@
 #include <stdlib.h>
 #include <string.h>
 
+// Type identifiers for variables
+#define INT_TYPE    1
+#define FLOAT_TYPE  2
+
 // Symbol Table Entry
 typedef struct Symbol {
-    char* name;         // Name of the variable
-    int type;           // Type of the variable (INT, FLOAT)
-    struct Symbol* next;
+    char* name;         // Name of the variable (dynamically allocated)
+    int type;           // Type of the variable (INT_TYPE or FLOAT_TYPE)
+    struct Symbol* next; // Pointer to the next symbol in the table (for collision handling or list)
 } Symbol;
 
 // Symbol Table Functions
-Symbol* create_symbol(char* name, int type);
-void insert_symbol(char* name, int type);
-Symbol* lookup_symbol(char* name);
-void print_symbol_table();
-void free_symbol_table();
+// Creates a new symbol with the given name and type
+Symbol* create_symbol(const char* name, int type);
 
-// Types
-#define INT_TYPE    1
-#define FLOAT_TYPE  2
+// Inserts a symbol into the table; assumes name is not already present
+void insert_symbol(const char* name, int type);
+
+// Looks up a symbol by name; returns NULL if not found
+Symbol* lookup_symbol(const char* name);
+
+// Prints the symbol table for debugging
+void print_symbol_table();
+
+// Frees all memory allocated for the symbol table
+void free_symbol_table();
 
 #endif
