@@ -1,7 +1,7 @@
-wholenum a = 5;
-wholenum b = 3;
+full a = 5;
+full b = 3;
 when (a > b) {
-    display(a);
+    Result(a);
 } alter {
-    display(b);
+    Result(b);
 }

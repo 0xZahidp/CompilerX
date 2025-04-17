@@ -1,8 +1,8 @@
-wholenum num = 5;
+full num = 5;
 when (num > 0) {
 	num = num + 1;
-    display(num);
-} alter {
+    Result(num);
+} ewhen {
 	num = num -2;
-    display(num);
+    Result(num);
 }

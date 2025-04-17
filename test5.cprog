@@ -1,4 +1,4 @@
-wholenum a = 5;
-wholenum b = 3;
-wholenum result = a * b + 2;
-display(result);
+full a = 5;
+full b = 3;
+full result = a * b + 2;
+Result(result);

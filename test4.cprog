@@ -1,4 +1,4 @@
-wholenum i = 0;
-cycle (i = 0; i < 5; i = i + 1) {
-    display(i);
+full i = 0;
+floop (i = 0; i < 5; i = i + 1) {
+    Result(i);
 }

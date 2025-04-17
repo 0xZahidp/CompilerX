@@ -1,5 +1,5 @@
-wholenum i = 0;
+full i = 0;
 while (i > 1) {
-    display(i);
+    Result(i);
     i = i + 1;
 }

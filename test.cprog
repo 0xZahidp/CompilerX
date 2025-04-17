@@ -1,16 +1,16 @@
-wholenum a = 1;
-wholenum b = 5;
+full a = 1;
+full b = 5;
 
-display(a + b * 2);
+Result(a + b * 2);
 
 when (a > b) {
     a = a + 1;
-    display(a);
+    Result(a);
 }
-alter {
-    display(b);
+ewhen {
+    Result(b);
 }
 
-cycle (a = 1; a > 5; a = a + 1) {
-    display(a + b);
+floop (a = 1; a > 5; a = a + 1) {
+    Result(a + b);
 }

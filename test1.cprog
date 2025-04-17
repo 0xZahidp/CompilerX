@@ -1,4 +1,4 @@
-wholenum x = 10;
-wholenum y = 20;
+full x = 10;
+full y = 20;
 x = x + y;
-display(x);
+Result(x);

@@ -9,12 +9,16 @@ ws          [ \t\n\r]+
 
 %%
 
-"wholenum"  { return INT; }
+"full"  { return INT; }
 "when"      { return IF; }
-"alter"     { return ELSE; }
+"ewhen"     { return ELSE; }
 "while"     { return WHILE; }      // keep 'while' or change to 'loop'
-"cycle"     { return FOR; }        // new token for future use
-"display"   { return DISPLAY; }    // new token for printf-style print
+"floop"     { return FOR; }        // new token for future use
+"Result"   { return DISPLAY; } 
+"Zahid" {
+    printf("Zahid's ID -> 221-15-4996\n");
+}
+
 
 
 "=="                { return EQ; }
