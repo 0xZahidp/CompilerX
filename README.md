@@ -5,11 +5,11 @@ Welcome to the **Custom Word Compiler** project! This compiler is designed to pa
 
 ## Features
 - **Custom Keywords**: 
-  - `wholenum` → `int`
+  - `full` → `int`
   - `when` → `if`
-  - `alter` → `else`
-  - `cycle` → `for`
-  - `display` → print output
+  - `ewhen` → `else`
+  - `floop` → `for`
+  - `Result` → print output
 - **Basic Arithmetic Operations**: Supports `+`, `-`, `*`, `/`, `%` for expressions.
 - **Relational Operators**: Handles comparison operations like `==`, `!=`, `<`, `>`, `<=`, `>=`.
 - **Control Flow**: Supports `if`, `else`, `while`, and `for` loops with conditions.
