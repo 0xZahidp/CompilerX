@@ -1,0 +1,4 @@
+wholenum x = 10;
+wholenum y = 20;
+x = x + y;
+display(x);

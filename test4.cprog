@@ -1,0 +1,4 @@
+wholenum i = 0;
+cycle (i = 0; i < 5; i = i + 1) {
+    display(i);
+}

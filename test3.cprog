@@ -1,0 +1,5 @@
+wholenum i = 0;
+while (i > 1) {
+    display(i);
+    i = i + 1;
+}

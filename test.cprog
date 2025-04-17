@@ -1,0 +1,16 @@
+wholenum a = 1;
+wholenum b = 5;
+
+display(a + b * 2);
+
+when (a > b) {
+    a = a + 1;
+    display(a);
+}
+alter {
+    display(b);
+}
+
+cycle (a = 1; a > 5; a = a + 1) {
+    display(a + b);
+}

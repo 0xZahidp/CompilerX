@@ -1,0 +1,8 @@
+wholenum num = 5;
+when (num > 0) {
+	num = num + 1;
+    display(num);
+} alter {
+	num = num -2;
+    display(num);
+}

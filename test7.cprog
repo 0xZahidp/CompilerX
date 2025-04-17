@@ -1,0 +1,9 @@
+wholenum a = 5;
+wholenum b = 3;
+when (a > b) {
+    when (b < 5) {
+        display(a + b);
+    }
+} alter {
+    display(b);
+}
