@@ -13,7 +13,7 @@ Welcome to the **Custom Word Compiler** project! This compiler is designed to pa
 - **Basic Arithmetic Operations**: Supports `+`, `-`, `*`, `/`, `%` for expressions.
 - **Relational Operators**: Handles comparison operations like `==`, `!=`, `<`, `>`, `<=`, `>=`.
 - **Control Flow**: Supports `if`, `else`, `while`, and `for` loops with conditions.
-- **Variable Declaration and Assignment**: Declare variables using `wholenum` and assign them values with `=`.
+- **Variable Declaration and Assignment**: Declare variables using `full` and assign them values with `=`.
   
 ## How It Works
 
